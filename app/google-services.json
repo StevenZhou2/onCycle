@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1046553857597",
+    "firebase_url": "https://oncycle-4654b.firebaseio.com",
+    "project_id": "oncycle-4654b",
+    "storage_bucket": "oncycle-4654b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046553857597:android:d0a6bf1437780323",
+        "android_client_info": {
+          "package_name": "com.example.noric.oncycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1046553857597-kd0r53imu8soo9hvlaee1fi2icrnbn9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.noric.oncycle",
+            "certificate_hash": "6fbb94576d8d2d139e12630100467aac6e6b9a17"
+          }
+        },
+        {
+          "client_id": "1046553857597-2avmne9kikaa8oqijn180u6ebmjqlauk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3RcUhAxAVCev0_JlXdzmtogQjmUd5R8A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1046553857597-2avmne9kikaa8oqijn180u6ebmjqlauk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
