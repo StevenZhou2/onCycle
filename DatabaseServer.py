@@ -1,7 +1,7 @@
 #OnCycle Project - Database Server Interface
 #--------------------------------------------------------------------------------------------------------
 #Project: SYSC 3010 - OnCycle Project
-#Author: Christian Sargusingh
+#Author: Christian Sargusingh, Nathan Fohkens
 #Date: 2018-11-22
 #---------------------------------------------------------------------------------------------------------
 #Description: This file contains the code for receiving accelerometer data from the NetworkController using
@@ -13,7 +13,8 @@
 import sys, time, serial, socket, pyrebase
 
 #firebase configuration
-config = {
+config = {  # recommnedation is to have this in a separeate config file
+            # anyone can see this information and access our database and mess around with our database
     "apiKey": "AIzaSyAnn-gvjSnif1mZ1IM1VGStOnECjXlHh7E",
     "authDomain": "oncycle-4654b.firebaseapp.com",
     "databaseURL": "https://oncycle-4654b.firebaseio.com/",
