@@ -1,55 +1,39 @@
 package com.example.noric.oncycle;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity { //implements LocationListener {
+
+public class MainActivity extends AppCompatActivity {
 
     TextView Timer;
-    TextView displaySpeed;
+    TextView displayAcc;
     Button start, pause, reset;
+    ImageView leftArr, rightArr, brakes;
     long timeInMS, sTime, timeBuff;
     long updateTime = 0L;
     Handler handler;
     int seconds, minutes, ms;
-    boolean left, right, brake;
-/*
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
 
-    myRef.addChildEventListener(new ValueEventListener() {
-    @Override
-    public void onDataChange(com.example.noric.oncycle.DataSnapshot dataSnapshot, String s) {
-        // This method is called once with the initial value and again
-        // whenever data at this location is updated.
-        String value = dataSnapshot.getValue(String.class);
-        Log.d(TAG, "Value is: " + value);
-    }
-
-    @Override
-    public void onCancelled(DatabaseError error) {
-        // Failed to read value
-        Log.w(TAG, "Failed to read value.", error.toException());
-        }
-    });
-*/
+    private DatabaseReference AvgAcc;
+    private DatabaseReference isTurned;
+    private DatabaseReference rightTurn;
+    private DatabaseReference leftTurn;
+    private DatabaseReference brakeSignal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +44,94 @@ public class MainActivity extends AppCompatActivity { //implements LocationListe
         start = (Button) findViewById(R.id.btStart);
         pause = (Button) findViewById(R.id.btPause);
         reset = (Button) findViewById(R.id.btReset);
-        //LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        displayAcc = (TextView) findViewById(R.id.tvAcc);
+        leftArr = (ImageView) findViewById(R.id.leftArrow);
+        rightArr = (ImageView) findViewById(R.id.rightArrow);
+        brakes = (ImageView) findViewById(R.id.brakes);
 
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
-        //if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-         //   return;
+        AvgAcc = FirebaseDatabase.getInstance().getReference().child("data").child("AvgAcc");
+        isTurned = FirebaseDatabase.getInstance().getReference().child("data").child("isTurned");
+        rightTurn = FirebaseDatabase.getInstance().getReference().child("data").child("RightTurn");
+        leftTurn = FirebaseDatabase.getInstance().getReference().child("data").child("LeftTurn");
+        brakeSignal = FirebaseDatabase.getInstance().getReference().child("data").child("BrakeSignal");
 
-        //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 0, this);
+        AvgAcc.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String AvgAccValue = dataSnapshot.getValue().toString();
+                displayAcc.setText("Avgerage Accleration: " + AvgAccValue);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        isTurned.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String isTurnedValue = dataSnapshot.getValue().toString();
+                if (isTurnedValue.equals("1")) {
+                    rightArr.setVisibility(View.INVISIBLE);
+                    leftArr.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        leftTurn.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String leftTurnValue = dataSnapshot.getValue().toString();
+                if (leftTurnValue.equals("1")) {
+                    leftArr.setVisibility(View.VISIBLE);
+                }else {
+                    leftArr.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        rightTurn.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String rightTurnValue = dataSnapshot.getValue().toString();
+                if (rightTurnValue.equals("1")) {
+                    rightArr.setVisibility(View.VISIBLE);
+                }else {
+                    rightArr.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        brakeSignal.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String brakeSignalValue = dataSnapshot.getValue().toString();
+                if (brakeSignalValue.equals("1")) {
+                    brakes.setVisibility(View.VISIBLE);
+                } else {
+                    brakes.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         handler = new Handler();
 
@@ -127,36 +186,4 @@ public class MainActivity extends AppCompatActivity { //implements LocationListe
             handler.postDelayed(this, 0);
         }
     };
-
-/*
-    @Override
-    public void onLocationChanged(Location location) {
-
-                displaySpeed = (TextView) findViewById(R.id.tvSpeed);
-
-                if (location == null) {
-                    displaySpeed.setText("-.--");
-                } else {
-                    double nCurrentSpeed = location.getSpeed() * 3.6;
-                    displaySpeed.setText(Double.toString(nCurrentSpeed));
-                }
-            }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-*/
 }
-
