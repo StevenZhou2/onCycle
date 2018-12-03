@@ -23,22 +23,24 @@
         tools:ignore="HardcodedText" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/leftArrow"
         android:layout_width="80dp"
         android:layout_height="136dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
         android:layout_marginBottom="52dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintEnd_toStartOf="@+id/brakes"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/arrowleft"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/brakes"
         android:layout_width="152dp"
         android:layout_height="136dp"
         android:layout_marginStart="116dp"
@@ -47,46 +49,32 @@
         android:layout_marginEnd="116dp"
         android:layout_marginRight="116dp"
         android:layout_marginBottom="52dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSpeed"
+        app:layout_constraintTop_toBottomOf="@+id/btPause"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/breaks"
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/rightArrow"
         android:layout_width="80dp"
         android:layout_height="136dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="52dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/brakes"
         app:srcCompat="@drawable/arrowright"
         tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="22dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="224dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="km/h"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/tvSpeed"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/btStart"
@@ -151,38 +139,24 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="28dp"
+        android:id="@+id/tvAcc"
+        android:layout_width="324dp"
+        android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Speed: "
-        app:layout_constraintEnd_toStartOf="@+id/tvSpeed"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/tvSpeed"
-        android:layout_width="177dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="0.00"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginBottom="13dp"
+        android:text="Average Acceleration: 000"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/brakes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.85"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btPause"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.107"
         tools:ignore="HardcodedText" />
 
 </android.support.constraint.ConstraintLayout>
