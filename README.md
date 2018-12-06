@@ -1,6 +1,8 @@
 # onCycle
 Carleton University 3rd Year Computer Systems Engineering Project Course
 
+Note: user: ILoveEatingRice commits are Steven Zhou's old github account. 
+
 This is a project created for the interest of SYSC3020. 
 
 Proposal: https://docs.google.com/document/d/1WeDNtLlDCsHzvKkRGRF7GaEJgoGLFuDdTI8q8bofrOs/edit?usp=sharing
