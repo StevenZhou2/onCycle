@@ -50,7 +50,8 @@ class NetworkController(object):
     #
     def serialRead(self, ser):
         try:
-            return ser.readline()
+            getValue = ser.readline()
+            return getValue
         #Overrides Serial Exception to prevent the read cycle from being halted
         except serial.SerialException:
             print("Serial Exception")
