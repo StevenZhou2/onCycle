@@ -7,7 +7,7 @@ This is a project created for the interest of SYSC3020.
 
 Proposal: https://docs.google.com/document/d/1WeDNtLlDCsHzvKkRGRF7GaEJgoGLFuDdTI8q8bofrOs/edit?usp=sharing
 
-Final Report: #TOBEADDED
+Final Report: https://docs.google.com/document/d/1Fyc9J35bfsdD_GmBIRzxaPumELoXXPGDXqmJ-pHRuV4/edit?usp=sharing
 
 Android Program developed by: Steven Zhou
 
