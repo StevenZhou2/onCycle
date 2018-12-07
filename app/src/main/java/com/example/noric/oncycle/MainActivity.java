@@ -11,35 +11,59 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+//Imports for firebase functionalities
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 public class MainActivity extends AppCompatActivity {
-
+    
+    //Declaring variables for Android views
     TextView Timer;
     TextView displayAcc;
     Button start, pause, reset;
     ImageView leftArr, rightArr, brakes;
+    
+    //Declaring variables for creating the timer
     long timeInMS, sTime, timeBuff;
     long updateTime = 0L;
     Handler handler;
-    int seconds, minutes, ms;
-
+    int seconds;
+    int minutes;
+    int ms;
+    
+    //Declaring variables to reference the database (firebase)
     private DatabaseReference AvgAcc;
-    private DatabaseReference isTurned;
     private DatabaseReference rightTurn;
     private DatabaseReference leftTurn;
     private DatabaseReference brakeSignal;
+    
+    //Created a start timer function as it is used during the start of application
+    //along with the start button
+    private void startTimer(){
+        sTime = SystemClock.uptimeMillis();
+        handler.postDelayed(runnable, 0);
 
+        reset.setEnabled(false);
+    }
+    
+    //Starts the timer as the application is launched
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        startTimer();
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    
         setContentView(R.layout.activity_main);
 
+        //Declaring variables for Android views
         Timer = (TextView) findViewById(R.id.tvTimer);
         start = (Button) findViewById(R.id.btStart);
         pause = (Button) findViewById(R.id.btPause);
@@ -48,19 +72,19 @@ public class MainActivity extends AppCompatActivity {
         leftArr = (ImageView) findViewById(R.id.leftArrow);
         rightArr = (ImageView) findViewById(R.id.rightArrow);
         brakes = (ImageView) findViewById(R.id.brakes);
-
+    
+        //Variables used for referencing points in firebase
         AvgAcc = FirebaseDatabase.getInstance().getReference().child("data").child("AvgAcc");
-        isTurned = FirebaseDatabase.getInstance().getReference().child("data").child("isTurned");
         rightTurn = FirebaseDatabase.getInstance().getReference().child("data").child("RightTurn");
         leftTurn = FirebaseDatabase.getInstance().getReference().child("data").child("LeftTurn");
         brakeSignal = FirebaseDatabase.getInstance().getReference().child("data").child("BrakeSignal");
 
+        //Event listener for updates on AvgAcc in firebase
         AvgAcc.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String AvgAccValue = dataSnapshot.getValue().toString();
-                displayAcc.setText("Avgerage Accleration: " + AvgAccValue);
+                displayAcc.setText("Average Acceleration: " + AvgAccValue);
             }
 
             @Override
@@ -69,26 +93,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        isTurned.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String isTurnedValue = dataSnapshot.getValue().toString();
-                if (isTurnedValue.equals("1")) {
-                    rightArr.setVisibility(View.INVISIBLE);
-                    leftArr.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        //Event listener for updates on leftTurn in firebase
         leftTurn.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String leftTurnValue = dataSnapshot.getValue().toString();
+                //Display image if signal is on, otherwise do not display
                 if (leftTurnValue.equals("1")) {
                     leftArr.setVisibility(View.VISIBLE);
                 }else {
@@ -100,11 +110,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        
+        //Event listener for updates on rightTurn in firebase
         rightTurn.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String rightTurnValue = dataSnapshot.getValue().toString();
+                //Display image if signal is on, otherwise do not display
                 if (rightTurnValue.equals("1")) {
                     rightArr.setVisibility(View.VISIBLE);
                 }else {
@@ -116,11 +128,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+        
+        //Event listener for updates on brakeSignal in firebase
         brakeSignal.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String brakeSignalValue = dataSnapshot.getValue().toString();
+                //Display image if signal is on, otherwise do not display
                 if (brakeSignalValue.equals("1")) {
                     brakes.setVisibility(View.VISIBLE);
                 } else {
@@ -134,17 +148,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         handler = new Handler();
-
+        
+        /*
+        *Created event listener for start button
+        *Start button will initiate the timer
+        */
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sTime = SystemClock.uptimeMillis();
-                handler.postDelayed(runnable, 0);
-
-                reset.setEnabled(false);
+                startTimer();
             }
         });
-
+        
+        /*
+        *Created event listener for pause button
+        *Reset button will pause the time variables and will display the last registered time variable
+        */
         pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,13 +174,18 @@ public class MainActivity extends AppCompatActivity {
                reset.setEnabled(true);
             }
         });
-
+        
+        /*
+        *Created event listener for reset button
+        *Reset button will reset the time variables to 0; android application will display 00:00:00
+        */
         reset.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
                 timeInMS = 0L;
                 sTime = 0L;
+                timeBuff = 0L;
                 updateTime = 0L;
                 seconds = 0;
                 minutes = 0;
@@ -171,9 +195,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    
+    /*
+    *Created a runnable object that will update the timer as the time has been elapsed
+    */
     public Runnable runnable = new Runnable() {
-        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         public void run() {
             timeInMS = SystemClock.uptimeMillis() - sTime;
             updateTime = timeBuff + timeInMS;
