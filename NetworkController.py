@@ -11,7 +11,6 @@
 import socket
 import sys, time, serial
 
-
 class NetworkController(object):
     #Network Controller object fields
     host = ""
