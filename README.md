@@ -6,8 +6,6 @@ Note: user: ILoveEatingRice commits are Steven Zhou's old github account.
 
 This is a project created for the interest of SYSC3010. 
 
-Proposal: https://docs.google.com/document/d/1WeDNtLlDCsHzvKkRGRF7GaEJgoGLFuDdTI8q8bofrOs/edit?usp=sharing
-
 Final Report: https://docs.google.com/document/d/1Fyc9J35bfsdD_GmBIRzxaPumELoXXPGDXqmJ-pHRuV4/edit?usp=sharing
 
 Android Program developed by: Steven Zhou
