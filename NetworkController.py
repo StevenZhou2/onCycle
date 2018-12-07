@@ -4,7 +4,7 @@
 #Author: Christian Sargusingh, Steven Zhou
 #Date: 2018-11-21
 #---------------------------------------------------------------------------------------------------------
-#Description: This file contains the code for retreiving the accelerometer data on a specified serial port
+#Description: This file contains the code for retreiving the accelerometer data and button states on a specified serial port
 #and sending the values to the Database Server in real time.
 
 #import necessary libraries
