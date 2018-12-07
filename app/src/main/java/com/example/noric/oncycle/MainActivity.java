@@ -1,3 +1,10 @@
+/*
+*Android Application: onCylce
+*onCycle is a system that mimics a car's turning features and transfers
+*that to a bicycle
+*Developer: Steven Zhou
+*/
+
 package com.example.noric.oncycle;
 
 import android.annotation.SuppressLint;
