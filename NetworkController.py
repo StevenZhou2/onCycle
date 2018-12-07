@@ -25,6 +25,7 @@ class NetworkController(object):
         self.textport = textport
         self.serial_port = serial_port
         
+    #Reads data from Arduino and sends to RPi3    
     def serialIO(self):
         #Define socket object
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -47,7 +48,9 @@ class NetworkController(object):
         except KeyboardInterrupt:
             print("Client shutdown successful")
 
-    #
+    #Reads from Arduino serial monitor and returns the value
+    #@param ser The serial that we are reading from
+    #@return the value from the serial 
     def serialRead(self, ser):
         try:
             getValue = ser.readline()
@@ -57,7 +60,9 @@ class NetworkController(object):
             print("Serial Exception")
             return 0
     
-    #
+    #Sends the data to RPi3
+    #@param s, line, server_address sends data, line, to the given socket and server address
+    #@return true if successful send, re
     def sendUDP(self, s, line, server_address): 
         try:
             s.sendto(line, server_address)
@@ -82,5 +87,3 @@ def main():
 #Check to see if the file is ran as a script or from a module
 if __name__ == '__main__':
     main()
-            
-
