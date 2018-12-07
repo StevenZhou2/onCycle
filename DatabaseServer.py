@@ -58,8 +58,8 @@ class DatabaseServer(object):
                 data = self.udpReceive(s, server_address)
 		#Variables from Arduino serial read
 		leftState, brakeState, rightState, avgAcc = self.parseData(data)
-                fullState = self.serialCollect(avgAcc)
-                #if fullState is true then compute the average of the capture and upload to firebase
+		fullState = self.serialCollect(avgAcc)
+		#if fullState is true then compute the average of the capture and upload to firebase
                 if (fullState):
                     print ("Capture full, computing average acceleration...")
                     avgAcc = self.setAvgAcc(self.prev_capture)
