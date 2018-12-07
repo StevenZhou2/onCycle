@@ -140,7 +140,7 @@ void loop(){
     //reset timer for next cycle
     timer = 0;
   }
-    
+  //delay when to print datapoints to ensure all intended data points are getting read
   if (timer%1000 == 0){
     analog = analogRead(zpin);
     Serial.print(leftState);
@@ -148,6 +148,7 @@ void loop(){
     Serial.print(rightState);
     Serial.println(analog);
     
+    //turn off LED when turn has been completed
     if (analog > 550){
       rightState = false;
       digitalWrite(RIGHT_PIN, LOW);
