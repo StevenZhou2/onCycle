@@ -1,7 +1,7 @@
 #OnCycle Project - Database Server Interface
 #--------------------------------------------------------------------------------------------------------
 #Project: SYSC 3010 - OnCycle Project
-#Author: Christian Sargusingh, Nathan Fohkens
+#Author: Christian Sargusingh, Steven Zhou, Nathan Fohkens
 #Date: 2018-11-22
 #---------------------------------------------------------------------------------------------------------
 #Description: This file contains the code for receiving accelerometer data from the NetworkController using
@@ -39,7 +39,8 @@ class DatabaseServer(object):
         self.prev_capture = prev_capture
         self.capture = capture
         self.fdb = fdb
-        
+            
+    #Parse from sender to upload to firebase   
     def parse(self):
         #Define socket object
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -66,7 +67,10 @@ class DatabaseServer(object):
         #if a keyboard interrupt is detected then terminate server
         except KeyboardInterrupt:
             print("Server shutdown successful")
-
+            
+    #Intake data to average out
+    #@param data Data to be averaged out
+    #@return true if intake of 10 data points have been registered, otherwise false
     def serialCollect(self, data):
         #check if the capacity of capture has been reached. Then if it is full reset index purge the current capture and start a new capture list
         if (len(self.capture) == 10):
@@ -78,6 +82,9 @@ class DatabaseServer(object):
         self.capture.append(int(data))
         return False
 
+    #Upload average acceleration to firebase
+    #@param avgAcc The average acceleration of the last 10 data points
+    #@return true if successful upload, otherwise false
     def firebaseUpload(self, avgAcc):
         try:
             self.fdb.child("data").update({"AvgAcc": avgAcc})
@@ -85,10 +92,16 @@ class DatabaseServer(object):
             print(e)
             return False
         return True
-        
+
+    #Find average acceleration
+    #@param prev_capture The list of the last 10 captured data
+    #@return the average of the last 10 captured data
     def setAvgAcc(self, prev_capture):
         return sum(prev_capture)/len(prev_capture)
     
+    #Read from port
+    #@param s, server_address Parameters needed to know where to read from
+    #@return the data sent from sender
     def udpReceive(self, s, server_address): 
         try:
             buf, address = s.recvfrom(2048)
