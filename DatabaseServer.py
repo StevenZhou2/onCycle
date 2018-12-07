@@ -56,14 +56,16 @@ class DatabaseServer(object):
             while True:
                 print ("Waiting to receive on port %d : press Ctrl-C or Ctrl-Break to stop" % port)
                 data = self.udpReceive(s, server_address)
-                fullState = self.serialCollect(data)
+		#Variables from Arduino serial read
+		leftState, brakeState, rightState, avgAcc = self.parseData(data)
+                fullState = self.serialCollect(avgAcc)
                 #if fullState is true then compute the average of the capture and upload to firebase
                 if (fullState):
                     print ("Capture full, computing average acceleration...")
                     avgAcc = self.setAvgAcc(self.prev_capture)
                     #upload the average acceleration to firebase
                     print ("Uploading to Firebase...")
-                    self.firebaseUpload(avgAcc)
+                    self.firebaseUpload(leftState, brakeState, rightState, avgAcc)
         #if a keyboard interrupt is detected then terminate server
         except KeyboardInterrupt:
             print("Server shutdown successful")
@@ -83,10 +85,13 @@ class DatabaseServer(object):
         return False
 
     #Upload average acceleration to firebase
-    #@param avgAcc The average acceleration of the last 10 data points
+    #@param leftState, brakeState, rightState, avgAcc Variables to upload to firebase
     #@return true if successful upload, otherwise false
-    def firebaseUpload(self, avgAcc):
+    def firebaseUpload(self, leftState, brakeState, rightState, avgAcc):
         try:
+	    self.fdb.child("data").update({"LeftState": leftState})
+	    self.fdb.child("data").update({"RightState": rightState})
+	    self.fdb.child("data").update({"BrakeState": brakeState})	
             self.fdb.child("data").update({"AvgAcc": avgAcc})
         except Exception as e:
             print(e)
@@ -110,7 +115,22 @@ class DatabaseServer(object):
             print(e)
             return 0
         return buf
-    
+
+    #Parse data received and place into proper variables
+    #@param data The data being read in
+    #@return leftState, rightState, brakeState, avgAcc Data placed into variables
+    def parseData(self, data): 
+        try:
+	    splitDataList = data.split(" ");
+	    leftState = int (splitDataList[0])
+	    brakeState = int (splitDataList[1])
+	    rightState = int (splitDataList[2])
+	    avgAcc = int (splitDataList[3] + splitDataList[4] + splitDataList[5])
+        except Exception as e:
+            print(e)
+            return 0
+        return leftState, brakeState, rightState, avgAcc
+
 #Initialization method - prompt input arguments
 def main():
     #Host static IP Address (RPi1 static IP address: 10.0.0.52)
@@ -130,5 +150,3 @@ def main():
 #Check to see if the file is ran as a script or from a module
 if __name__ == '__main__':
     main()
-            
-
